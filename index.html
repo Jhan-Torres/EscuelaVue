@@ -18,15 +18,60 @@
 
     <!-- Content -->
     <article class="content">
-      <h1 class="content__title">Search GitHub users</h1>
+      <h1 class="content__title">GitHub Users</h1>
       <!-- Search -->
-      <form class="search">
-        <input type="text" class="search__input" required placeholder="Search GitHub users">
-        <input type="submit" class="search__submit" value="Search">
+      <form 
+        class="search" 
+        v-on:submit.prevent="doSearch"
+      >
+        <input
+          v-model="search"
+          type="text"
+          class="search__input"
+          required 
+          placeholder="Search GitHub users"
+        >
+        <input 
+          type="submit" 
+          class="search__submit"
+          value="Search"
+        >
       </form>
       <!-- Result -->
+      <div 
+        class="result"
+        v-if="result"
+      >
+        <h2 class="result__name">
+          {{result.name}}
+        </h2>
+        <img :src="result.avatar_url" 
+          alt="userImage"
+          class="result__avatar"
+        >
+        <p class="result__bio">
+          {{result.bio}}
+          <br>
+          <a 
+            :href="result.html_url"
+            class="result__blog"
+            target="_blank"
+          >
+            Link GitHub account
+          </a>
+        </p>
+      </div>
+      <p v-else>
+        Waiting for search...
+      </p>
+
       <!-- Error -->
-      <div class="result__error"></div>
+      <div 
+        class="result__error"
+        v-if="errorFound"
+      >
+        <h3>{{errorFound}}</h3>
+      </div>
     </article>
   </div>
   <script src="js/main.js"></script>
