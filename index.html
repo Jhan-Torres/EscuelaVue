@@ -41,7 +41,23 @@
       <div 
         class="result"
         v-if="result"
-      >
+      > 
+        <a 
+          v-if="isFavorite"
+          href="#" 
+          class="result__toggle-favorite"
+          @click="removeFavorite"
+        >
+          Remove Favorites
+        </a>
+        <a 
+          v-else
+          href="#" 
+          class="result__toggle-favorite"
+          @click="addFavorite"
+        >
+          Add Favorite
+        </a>
         <h2 class="result__name">
           {{result.name}}
         </h2>

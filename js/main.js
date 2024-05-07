@@ -6,6 +6,12 @@ const app = Vue.createApp({
       search: null,
       result: null,
       errorFound: false,
+      favorites: new Map(),
+    }
+  },
+  computed: {
+    isFavorite() {
+      return this.favorites.has(this.result.id)
     }
   },
   methods: {
@@ -23,6 +29,14 @@ const app = Vue.createApp({
       } finally {
         this.search = null;
       }
+    },
+
+    addFavorite() {
+      this.favorites.set(this.result.id, this.result);
+    },
+    
+    removeFavorite() {
+      this.favorites.delete(this.result.id);
     }
   }
 })
