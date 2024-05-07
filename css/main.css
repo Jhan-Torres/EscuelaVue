@@ -14,17 +14,17 @@ body {
   justify-content: center;
   align-items: center;
   background-color: darkslateblue;
-  font-size: 1.3rem;
+  font-size: 1rem;
 }
 
 /* Content */
 .content {
   background-color: lightgrey;
-  width: 768px;
+  min-width: 500px;
   max-width: 768px;
-  padding: 3rem;
+  padding: 2rem;
   box-shadow: 2px 2px 3px gray;
-  border-radius: 1rem;
+  border-radius: 0.5rem;
 }
 
 .content__title {

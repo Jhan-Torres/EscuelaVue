@@ -12,6 +12,11 @@ const app = Vue.createApp({
   computed: {
     isFavorite() {
       return this.favorites.has(this.result.id)
+    },
+    allFavorites() {
+      return Array.from(this.favorites.values())
+      // Array.from --> convierte un elemento iterable en un Array
+      // .values() --> dado que es un map, este metodo retorna los valores del map
     }
   },
   methods: {
