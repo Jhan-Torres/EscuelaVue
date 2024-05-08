@@ -25,7 +25,7 @@ const app = Vue.createApp({
     async doSearch() {
       this.result = this.errorFound = null;
       try {
-        const response = await fetch(API + this.search);
+        const response = await fetch(API + this.search.trim());
         if(!response.ok) throw new Error(`user "${this.search}", not found.`)
         const data = await response.json();
         this.result = data;
