@@ -13,7 +13,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: darkslateblue;
+  background-color: rgb(1, 1, 14);
   font-size: 1rem;
 }
 
@@ -22,20 +22,20 @@ body {
   background-color: lightgrey;
   min-width: 500px;
   max-width: 768px;
-  padding: 2rem;
+  padding: 1rem;
   box-shadow: 2px 2px 3px gray;
   border-radius: 0.5rem;
 }
 
 .content__title {
-  margin: 1rem;
+  margin: 0.5rem;
   text-align: center;
 }
 
 /* Search */
 .search {
   display: flex;
-  margin-bottom: 2.5rem;
+  margin-bottom: 1rem;
 }
 
 .search__input {
@@ -47,11 +47,11 @@ body {
 /* Result */
 .result {
   position: relative;
-  background-color: purple;
+  background-color: rgb(60, 54, 145);
   border-radius: 0.3rem;
   box-shadow: 2px 2px 3px gray;
   color: white;
-  padding: 2.5rem;
+  padding: 1rem;
   display: grid;
   gap: 1rem;
   grid-template-areas:
