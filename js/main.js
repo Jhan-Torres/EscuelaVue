@@ -43,16 +43,20 @@ const app = Vue.createApp({
         return this.result = foundInFavorites
       }
       
+      await this.doRequest();
+      if (foundInFavorites) foundInFavorites.lastRequest = new Date();
+    },
+
+    async doRequest() {
       try {
-        console.log("Not found or cached version is too old");
-        this.result = this.errorFound = null;
-        const response = await fetch(API + this.search.trim());
-        if(!response.ok) throw new Error(`user "${this.search}", not found.`)
+        console.log('Not found in cache or cached version is too old');
+        this.result = this.error = null;
+        const response = await fetch(API + this.search);
+        if (!response.ok) throw new Error('User not found');
         const data = await response.json();
         this.result = data;
-        foundInFavorites.lastRequestTime = Date.now();
       } catch (error) {
-        this.errorFound = error;
+        this.error = error;
       } finally {
         this.search = null;
       }
@@ -60,7 +64,7 @@ const app = Vue.createApp({
 
     addFavorite() {
       //to store data when favorite was added to updated new changes if they happen on github´s profile  
-      this.result.lastRequestTime = Date.now();
+      this.result.lastRequest = new Date();
 
       this.favorites.set(this.result.login, this.result);
       this.updateStorage();
@@ -93,6 +97,6 @@ const app = Vue.createApp({
       this.favorites = favoritesStored;
     }
   }
-  
 })
 
+const mountedApp = app.mount('#app');
