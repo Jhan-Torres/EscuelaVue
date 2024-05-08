@@ -6,7 +6,7 @@ const app = Vue.createApp({
     return {
       search: null,
       result: null,
-      errorFound: false,
+      errorFound: null,
       favorites: new Map(),
     }
   },
@@ -24,32 +24,33 @@ const app = Vue.createApp({
 
   methods: {
     async doSearch() {
-      this.result = this.errorFound = null;
-
+      
       const foundInFavorites = this.favorites.get(this.search);
-
+      
       const shouldRequestAgain = (() => {
         if (!!foundInFavorites) {
-          const { lastRequestTime } = foundInFavorites
-          const now = Date.now()
-          return (now - lastRequestTime) > requestMaxTimeMs
+          const { lastRequest } = foundInFavorites;
+          return (
+            new Date().getTime() - new Date(lastRequest).getTime() > requestMaxTimeMs
+          );
         }
         return false
       })(); //IIFE
-
+      
       //dobule bang operator (!!) is used to convert values to boolean
       if (!!foundInFavorites && !shouldRequestAgain) {
         console.log("Found and we use the cached version")
         return this.result = foundInFavorites
       }
-
+      
       try {
         console.log("Not found or cached version is too old");
+        this.result = this.errorFound = null;
         const response = await fetch(API + this.search.trim());
         if(!response.ok) throw new Error(`user "${this.search}", not found.`)
         const data = await response.json();
         this.result = data;
-        foundInFavorites .lastRequestTime = Date.now();
+        foundInFavorites.lastRequestTime = Date.now();
       } catch (error) {
         this.errorFound = error;
       } finally {
@@ -77,6 +78,10 @@ const app = Vue.createApp({
 
     showFavorite(favorite) {
       this.result = favorite;
+    },
+
+    checkFavorite(id) {
+      return this.result?.login === id;
     }
   },
 
