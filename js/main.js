@@ -1,4 +1,5 @@
 const API = "https://api.github.com/users/";
+const requestMaxTimeMs = 3000;
 
 const app = Vue.createApp({
   data() {
@@ -12,7 +13,7 @@ const app = Vue.createApp({
 
   computed: {
     isFavorite() {
-      return this.favorites.has(this.result.id)
+      return this.favorites.has(this.result.login)
     },
     allFavorites() {
       return Array.from(this.favorites.values())
@@ -24,11 +25,31 @@ const app = Vue.createApp({
   methods: {
     async doSearch() {
       this.result = this.errorFound = null;
+
+      const foundInFavorites = this.favorites.get(this.search);
+
+      const shouldRequestAgain = (() => {
+        if (!!foundInFavorites) {
+          const { lastRequestTime } = foundInFavorites
+          const now = Date.now()
+          return (now - lastRequestTime) > requestMaxTimeMs
+        }
+        return false
+      })(); //IIFE
+
+      //dobule bang operator (!!) is used to convert values to boolean
+      if (!!foundInFavorites && !shouldRequestAgain) {
+        console.log("Found and we use the cached version")
+        return this.result = foundInFavorites
+      }
+
       try {
+        console.log("Not found or cached version is too old");
         const response = await fetch(API + this.search.trim());
         if(!response.ok) throw new Error(`user "${this.search}", not found.`)
         const data = await response.json();
         this.result = data;
+        foundInFavorites .lastRequestTime = Date.now();
       } catch (error) {
         this.errorFound = error;
       } finally {
@@ -37,12 +58,15 @@ const app = Vue.createApp({
     },
 
     addFavorite() {
-      this.favorites.set(this.result.id, this.result);
+      //to store data when favorite was added to updated new changes if they happen on github´s profile  
+      this.result.lastRequestTime = Date.now();
+
+      this.favorites.set(this.result.login, this.result);
       this.updateStorage();
     },
     
     removeFavorite() {
-      this.favorites.delete(this.result.id);
+      this.favorites.delete(this.result.login);
       this.updateStorage();
     },
 
@@ -60,7 +84,7 @@ const app = Vue.createApp({
   created() {
     const savedFavorites = JSON.parse(window.localStorage.getItem("favorites"));
     if (savedFavorites?.length) {
-      const favoritesStored = new Map(savedFavorites.map(favorite => [favorite.id, favorite])); 
+      const favoritesStored = new Map(savedFavorites.map(favorite => [favorite.login, favorite])); 
       this.favorites = favoritesStored;
     }
   }
