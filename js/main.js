@@ -29,8 +29,6 @@ const app = Vue.createApp({
         if(!response.ok) throw new Error(`user ${this.search} not found`)
         const data = await response.json();
         this.result = data;
-        console.log(data);
-
       } catch (error) {
         this.errorFound = error;
       } finally {

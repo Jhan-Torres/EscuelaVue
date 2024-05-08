@@ -14,29 +14,32 @@
   <div id="app">
     <!-- Favorites -->
     <div class="favorites">
-      <div 
-        class="favorite"
-        v-for="favorite in allFavorites"
-      >
-        <a 
-          href="#"
-          target="_blank"
-          @click.prevent="showFavorite(favorite)"
+        <transition-Group name="list">
+        <div 
+          class="favorite"
+          v-for="favorite in allFavorites"
+          :key="favorite.id"
         >
-          <img 
-            :src="favorite.avatar_url" 
-            :alt="favorite.name"
-            class="favorite__avatar"
+          <a 
+            href="#"
+            target="_blank"
+            @click.prevent="showFavorite(favorite)"
           >
-        </a>
-        <a 
-          :href="favorite.html_url"
-          class="link__perfil__github"
-          target="_blank"
-        >
-          GitHub Link
-        </a>
-      </div>
+            <img 
+              :src="favorite.avatar_url" 
+              :alt="favorite.name"
+              class="favorite__avatar"
+            >
+          </a>
+          <a 
+            :href="favorite.html_url"
+            class="link__perfil__github"
+            target="_blank"
+          >
+            GitHub Link
+          </a>
+        </div>
+      </transition-Group>
     </div>
 
     <!-- Content -->
@@ -61,46 +64,48 @@
         >
       </form>
       <!-- Result -->
-      <div 
-        class="result"
-        v-if="result"
-      > 
-        <a 
-          v-if="isFavorite"
-          href="#" 
-          class="result__toggle-favorite"
-          @click="removeFavorite"
-        >
-          Remove Favorites
-        </a>
-        <a 
-          v-else
-          href="#" 
-          class="result__toggle-favorite"
-          @click="addFavorite"
-        >
-          Add Favorite
-        </a>
-        <h2 class="result__name">
-          {{result.name}}
-        </h2>
-        <img :src="result.avatar_url" 
-          alt="userImage"
-          class="result__avatar"
-        >
-        <p class="result__bio">
-          {{result.bio}}
-          <br>
+      <Transition>
+        <div 
+          class="result"
+          v-if="result"
+        > 
           <a 
-            :href="result.html_url"
-            class="result__blog"
-            target="_blank"
+            v-if="isFavorite"
+            href="#" 
+            class="result__toggle-favorite"
+            @click="removeFavorite"
           >
-            Link GitHub account
+            Remove Favorites
           </a>
-        </p>
-      </div>
-      <p v-else>
+          <a 
+            v-else
+            href="#" 
+            class="result__toggle-favorite"
+            @click="addFavorite"
+          >
+            Add Favorite
+          </a>
+          <h2 class="result__name">
+            {{result.name}}
+          </h2>
+          <img :src="result.avatar_url" 
+            alt="userImage"
+            class="result__avatar"
+          >
+          <p class="result__bio">
+            {{result.bio}}
+            <br>
+            <a 
+              :href="result.html_url"
+              class="result__blog"
+              target="_blank"
+            >
+              Link GitHub account
+            </a>
+          </p>
+        </div>
+      </Transition>
+      <p v-if="!result">
         Waiting for search...
       </p>
 
