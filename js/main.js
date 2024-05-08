@@ -9,6 +9,7 @@ const app = Vue.createApp({
       favorites: new Map(),
     }
   },
+
   computed: {
     isFavorite() {
       return this.favorites.has(this.result.id)
@@ -19,6 +20,7 @@ const app = Vue.createApp({
       // .values() --> dado que es un map, este metodo retorna los valores del map
     }
   },
+
   methods: {
     async doSearch() {
       this.result = this.errorFound = null;
@@ -47,10 +49,21 @@ const app = Vue.createApp({
     },
 
     updateStorage() {
-      window.localStorage.setItem('favorites', JSON.stringify(this.allFavorites))
+      window.localStorage.setItem('favorites', JSON.stringify(this.allFavorites));
+      //converted to string due browser´s local storage can storage strings only
     },
 
 
+  },
+
+  //lifecycle method to get favorites map from local storage
+  created() {
+    const savedFavorites = JSON.parse(window.localStorage.getItem("favorites"));
+    if (savedFavorites.length) {
+      const favoritesStored = new Map(savedFavorites.map(favorite => [favorite.id, favorite])); 
+      this.favorites = favoritesStored;
+    }
   }
+  
 })
 
