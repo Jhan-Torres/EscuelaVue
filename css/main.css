@@ -92,11 +92,13 @@ body {
 }
 
 .result__error {
-  padding: 0.3rem;
+  padding: 0.2rem;
   background-color: tomato;
   color: white;
   text-align: center;
-  border: 1px solid red;
+  border: 3px solid red;
+  border-radius: 1rem;
+  font-size: 1rem;
 }
 
 /* Favorites */
