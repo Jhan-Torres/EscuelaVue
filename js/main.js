@@ -53,7 +53,9 @@ const app = Vue.createApp({
       //converted to string due browser´s local storage can storage strings only
     },
 
-
+    showFavorite(favorite) {
+      this.result = favorite;
+    }
   },
 
   //lifecycle method to get favorites map from local storage

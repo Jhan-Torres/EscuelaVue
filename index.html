@@ -19,8 +19,9 @@
         v-for="favorite in allFavorites"
       >
         <a 
-          :href="favorite.html_url"
+          href="#"
           target="_blank"
+          @click.prevent="showFavorite(favorite)"
         >
           <img 
             :src="favorite.avatar_url" 
